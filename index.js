@@ -2,7 +2,6 @@ const express = require('express');
 const { MongoClient } = require('mongodb');
 const ObjectId = require('mongodb').ObjectId;
 const cors = require('cors');
-
 require('dotenv').config();
 
 const app = express();
@@ -59,6 +58,26 @@ async function run() {
             const quary = { _id: ObjectId(id) };
             const result = await servicestourism.deleteOne(quary);
             res.json(result);
+        });
+
+        //updated data
+        app.put('/service/:id', async (req, res) => {
+            const id = req.params.id;
+            const updatedservice = req.body;
+            const filter = { _id: ObjectId(id) };
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: {
+                    img: updatedservice.img,
+                    name: updatedservice.name,
+                    price: updatedservice.price,
+                    packege: updatedservice.packege,
+                    description: updatedservice.description
+                },
+            };
+            const result = await servicestourism.updateOne(filter, updateDoc, options)
+            console.log('updating user', req);
+            res.json(result)
         })
     }
     finally {
