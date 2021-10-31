@@ -21,6 +21,7 @@ async function run() {
 
         const database = client.db("tourism_db");
         const servicestourism = database.collection("service");
+        const ordertourism = database.collection("orders");
 
         //Get Api
         app.get('/service', async (req, res) => {
@@ -28,7 +29,14 @@ async function run() {
             const service = await cursor.toArray();
             res.send(service);
         })
-
+        app.get('/orders/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { email: id };
+            const cursor = ordertourism.find(filter);
+            const oreder = await cursor.toArray();
+            res.send(oreder);
+            console.log(id);
+        })
         //get single service
 
         app.get('/service/:id', async (req, res) => {
@@ -51,6 +59,12 @@ async function run() {
             console.log(result)
             res.json(result)
         });
+
+        app.post('/orders', async (req, res) => {
+            const order = req.body;
+            const orderresult = await ordertourism.insertOne(order);
+            res.json(orderresult);
+        })
 
         //Delete Api
         app.delete('/service/:id', async (req, res) => {
