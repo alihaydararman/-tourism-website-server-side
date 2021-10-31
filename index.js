@@ -36,7 +36,18 @@ async function run() {
             const oreder = await cursor.toArray();
             res.send(oreder);
             console.log(id);
+        });
+
+
+        app.get('/orders', async (req, res) => {
+
+
+            const cursor = ordertourism.find({});
+            const oreder = await cursor.toArray();
+            res.send(oreder);
+            console.log(id);
         })
+
         //get single service
 
         app.get('/service/:id', async (req, res) => {
@@ -44,6 +55,14 @@ async function run() {
             console.log('getting sercice', id)
             const quary = { _id: ObjectId(id) };
             const sercice = await servicestourism.findOne(quary);
+            res.json(sercice)
+        })
+
+        app.delete('/orders/:id', async (req, res) => {
+            const id = req.params.id;
+            console.log('getting sercice', id)
+            const quary = { _id: ObjectId(id) };
+            const sercice = await ordertourism.deleteOne(quary);
             res.json(sercice)
         })
 
